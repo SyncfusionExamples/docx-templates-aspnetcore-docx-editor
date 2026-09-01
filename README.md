@@ -373,7 +373,7 @@ when adding more complex mail-merge data.
 ------------------------------------------------------------------------
 ## Resources
 
-- **Product page:**   [Syncfusion® React DOCX Editor](https://www.syncfusion.com/docx-editor-sdk/asp-net-core-docx-editor?utm_source=github&utm_medium=listing&utm_campaign=github-github-documenteditor-examples) 
+- **Product page:**   [Syncfusion® ASP.NET CORE DOCX Editor](https://www.syncfusion.com/docx-editor-sdk/asp-net-core-docx-editor?utm_source=github&utm_medium=listing&utm_campaign=github-github-documenteditor-examples) 
 
 - **Documentation:**   [Syncfusion® ASP.NET CORE DOCX Editor - Documentation](https://help.syncfusion.com/document-processing/word/word-processor/asp-net-core/overview?utm_source=github&utm_medium=listing&utm_campaign=github-github-documenteditor-examples) 
 
