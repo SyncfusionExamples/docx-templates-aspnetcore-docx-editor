@@ -1,0 +1,20 @@
+{
+  "Organization": [
+    {
+      "OrgName": "ABC Foundation",
+      "OrgAddress": "123 Main Street, New York, NY 10001",
+      "ReminderDate": "August 20, 2026",
+      "DonorName": "John Smith",
+      "DonorAddress": "45 Oak Street, New York, NY 10002",
+      "PledgeNumber": "PLG-2026-0042",
+      "PledgeDate": "July 15, 2026",
+      "PledgeAmount": "$2,500.00",
+      "AmountPaid": "$1,500.00",
+      "OutstandingAmount": "$1,000.00",
+      "DueDate": "September 15, 2026",
+      "PaymentMethod": "Online Payment",
+      "ContactEmail": "donations@abcfoundation.org",
+      "ContactPhone": "+1-212-555-0123"
+    }
+  ]
+}

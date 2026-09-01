@@ -1,0 +1,142 @@
+@page
+@using Syncfusion.EJ2
+@model DocumentTemplateStudioService.Pages.IndexModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Templates";
+}
+
+<div class="ts-template-list">
+    <div class="ts-list-header">
+        <h2>Templates</h2>
+        <p>Reusable document templates</p>
+        <ejs-button id="tsCreateBtn" content="New Template"
+                    iconCss="e-icons e-plus" isPrimary="true"
+                    cssClass="ts-e-btn"
+                    onclick="openCreateTemplateModal()"></ejs-button>
+    </div>
+
+    <div class="ts-list-search">
+        <form method="get" class="ts-search-form">
+            <ejs-textbox id="searchBox"
+                         placeholder="Search templates..."
+                         floatLabelType="Never"
+                         name="q"
+                         value="@Model.SearchQuery"></ejs-textbox>
+            <ejs-button id="tsSearchBtn" iconCss="e-icons e-search"
+                        cssClass="e-outline ts-e-btn" type="Submit"
+                        title="Search"></ejs-button>
+            @if (!string.IsNullOrEmpty(Model.SearchQuery))
+            {
+                <a href="/Index" title="Clear">
+                    <ejs-button id="tsClearBtn" content="Clear"
+                                cssClass="e-flat ts-e-btn"></ejs-button>
+                </a>
+            }
+        </form>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.Toast))
+    {
+        <div class="ts-toast ts-toast-success">@Model.Toast</div>
+    }
+
+    <div class="ts-list-table-wrapper">
+        <table class="ts-list-table">
+            <thead>
+                <tr>
+                    <th class="ts-col-name">NAME</th>
+                    <th class="ts-col-roles">ROLES</th>
+                    <th class="ts-col-created">CREATED</th>
+                    <th class="ts-col-actions">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Templates.Count == 0)
+                {
+                    <tr>
+                        <td colspan="4" class="ts-list-empty">
+                            No templates. Click "Create Template" to create one.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var t in Model.Templates)
+                    {
+                        <tr class="ts-list-row">
+                            <td class="ts-col-name">
+                                <a href="/Editor?id=@t.Id" class="ts-list-name">@t.Name</a>
+                            </td>
+                            <td class="ts-col-roles">
+                                <span class="ts-list-roles" title="@t.RolesDisplay">@t.RolesDisplay</span>
+                            </td>
+                            <td class="ts-col-created">
+                                <span class="ts-list-date">@t.CreatedDisplay</span>
+                            </td>
+                            <td class="ts-col-actions">
+                                <div class="ts-actions-group">
+                                    <a href="/Editor?id=@t.Id" title="Edit @t.Name">
+                                        <ejs-button id="@("editBtn_" + t.Id)" iconCss="e-icons e-edit" type="Button"
+                                                    cssClass="e-flat ts-e-btn ts-e-icon-btn"
+                                                    title="Edit @t.Name"></ejs-button>
+                                    </a>
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@t.Id"
+                                          style="display:inline;">
+                                        <ejs-button id="@("delBtn_" + t.Id)" iconCss="e-icons e-trash" type="Button"
+                                                    cssClass="e-flat ts-e-btn ts-e-icon-btn ts-e-delete"
+                                                    data-template-name="@t.Name"
+                                                    onclick="openDeleteTemplateDialog(this)"></ejs-button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@* Create Template modal — server-rendered partial. AJAX-submits to
+   the /Create page-model's POST handler; on success the modal closes
+   and the browser navigates to /Editor?id=<newId>. *@
+<partial name="_CreateTemplateModal" />
+
+@* Delete Template confirmation modal — opened by the trash icon,
+   submitted natively to /Index?handler=Delete&id=… which removes the
+   catalog entry AND the .docx from disk, then redirects back with a
+   toast. *@
+<div class="ts-modal-overlay" id="tsDeleteModal" role="dialog" aria-modal="true"
+     aria-labelledby="tsDeleteTitle" style="display:none;">
+    <div class="ts-modal-dialog ts-modal-dialog--danger" onclick="event.stopPropagation()">
+        <header class="ts-modal-head">
+            <h3 id="tsDeleteTitle">Delete Template</h3>
+            <button type="button" class="ts-modal-close"
+                    onclick="closeDeleteTemplateDialog()" aria-label="Close">×</button>
+        </header>
+        <div class="ts-modal-body">
+            <p class="ts-delete-warning">
+                <span class="e-icons e-trash"></span>
+                Delete <strong id="tsDeleteName"></strong>?
+            </p>
+            <p class="ts-hint">
+                This permanently removes the catalog entry and the linked <code>.docx</code>
+                file from disk. This action cannot be undone.
+            </p>
+        </div>
+        <footer class="ts-modal-actions ts-modal-actions--danger">
+            <ejs-button id="tsDeleteCancelBtn" content="Cancel" type="Button"
+                        cssClass="e-flat ts-e-btn"
+                        onclick="closeDeleteTemplateDialog()"></ejs-button>
+            <ejs-button id="tsDeleteConfirmBtn" content="Delete" type="Button"
+                        iconCss="e-icons e-trash" isPrimary="true"
+                        cssClass="ts-e-btn ts-e-btn-danger"
+                        onclick="confirmDeleteTemplate()"></ejs-button>
+        </footer>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
+}

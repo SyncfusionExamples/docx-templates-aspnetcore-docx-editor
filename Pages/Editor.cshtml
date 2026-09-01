@@ -1,0 +1,126 @@
+@page "{id?}"
+@using Syncfusion.EJ2
+@using Syncfusion.EJ2.DocumentEditor
+@model DocumentTemplateStudioService.Pages.EditorModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = Model.Template?.Name ?? "Editor";
+    var t = Model.Template!;
+}
+
+@* Document loading progress overlay — visible from the first paint of
+   /Editor until editor.js finishes loading the document (import fetch +
+   open) into the DocumentEditor. Covers the edit action and the
+   redirect after Create Template. Hidden by editor.js on load-complete
+   or load-failure (with a toast); falls back to a manual dismiss for
+   pathological cases. *@
+<div class="ts-doc-loading" id="tsDocLoading" role="status" aria-live="polite">
+    <div class="ts-doc-loading-card">
+        <div class="ts-spinner" aria-hidden="true"></div>
+        <h3 id="tsDocLoadingTitle">Opening “@t.Name”…</h3>
+        <p class="ts-doc-loading-sub" id="tsDocLoadingSub">Loading the document into the editor</p>
+        <div class="ts-progress"><div class="ts-progress-bar"></div></div>
+    </div>
+</div>
+
+<div class="ts-viewer">
+    <header class="ts-header">
+        <a href="/Index" id="tsBackBtn" title="Back to Templates">
+            <ejs-button id="tsBackBtnInner" content="Back"
+                        iconCss="e-icons e-left-arrow"
+                        cssClass="e-outline ts-e-btn ts-e-btn-back"></ejs-button>
+        </a>
+        <div class="ts-viewer-title">
+            <h2>@t.Name</h2>
+            <p>@t.Description</p>
+        </div>
+        <div class="ts-viewer-actions">
+            <ejs-button id="tsSaveBtn" content="Save and Publish"
+                        iconCss="e-icons e-save" isPrimary="true"
+                        disabled="true"
+                        cssClass="e-outline ts-e-btn ts-e-btn-save"
+                        title="Save and publish the document to disk. Enabled after you edit the document."></ejs-button>
+            <ejs-button id="tsPreviewBtn" content="Preview With Data"
+                        iconCss="e-icons e-eye" isPrimary="true"
+                        cssClass="e-outline ts-e-btn ts-e-btn-preview"
+                        title="Mail-merge the document with input JSON and preview the result."></ejs-button>
+            <ejs-button id="tsDownloadBtn" content="Download"
+                        iconCss="e-icons e-download"
+                        cssClass="e-outline ts-e-btn ts-e-btn-download"
+                        title="Download the document content."></ejs-button>
+        </div>
+    </header>
+    
+    <div class="ts-toast-host" id="tsToastHost" aria-live="polite"></div>
+
+    <div class="ts-viewer-body">
+        <div class="ts-viewer-canvas" id="tsCanvas">
+            <ejs-documenteditorcontainer id="DocumentEditor"
+                                         height="100%"
+                                         width="100%"
+                                         enableToolbar="true"
+                                         toolbarMode="@ToolbarMode.Ribbon"
+                                         showPropertiesPane="false"
+                                         serviceUrl="@Model.ServiceUrl"></ejs-documenteditorcontainer>
+        </div>
+
+        <partial name="_MergeFields" model="Model.MergeFields" />
+    </div>
+</div>
+
+<input type="hidden" id="tsTemplateId" value="@t.Id" />
+<input type="hidden" id="tsTemplateName" value="@t.Name" />
+<input type="hidden" id="tsDocxUrl" value="@t.DocxUrl" />
+
+@* Preview With Data dialog — pick/paste the input JSON that feeds
+   the MailMerge API. OK = serialize editor → docx blob → base64 →
+   POST /api/DocumentEditor/MailMerge → reopen returned SFDT. *@
+<div class="ts-modal-overlay" id="tsPreviewModal" role="dialog" aria-modal="true"
+     aria-labelledby="tsPreviewTitle" style="display:none;">
+    <div class="ts-modal-dialog ts-modal-dialog--preview" onclick="event.stopPropagation()">
+        <header class="ts-modal-head">
+            <h3 id="tsPreviewTitle">Preview With Data</h3>
+            <button type="button" class="ts-modal-close"
+                    onclick="closePreviewDialog()" aria-label="Close">×</button>
+        </header>
+        <div class="ts-modal-body">
+            <p class="ts-hint">
+                Select the input <strong>JSON</strong> file that provides the merge data. DocIO mail-merges the JSON into your document's
+                merge fields and returns the result to the editor.
+            </p>
+            <div class="ts-preview-filerow">
+                <input type="file" id="tsPreviewJsonFile" accept=".json,application/json"
+                       class="ts-preview-file" />
+                <button type="button" id="tsPreviewBrowseBtn"
+                        class="ts-btn2 ts-btn2-outline ts-preview-browse"
+                        onclick="triggerBrowseJsonFile()"
+                        title="Choose a .json file with the mail-merge data">
+                    <span class="e-icons e-folder"></span> Browse JSON file…
+                </button>
+                <span class="ts-preview-filename" id="tsPreviewFileName">No file selected</span>
+            </div>
+            @* Reference JSON — same PREVIEW_EXAMPLE_JSON constant that
+               editor.js renders into the collapsible example below.
+               The dialog has no editable JSON textarea: OK is enabled
+               only after Browse selects a file, and the file's content
+               is used directly for the mail merge. *@
+            <details class="ts-preview-example">
+                <summary>Reference JSON</summary>
+                <pre id="tsPreviewExamplePre"></pre>
+            </details>
+        </div>
+        <footer class="ts-modal-actions">
+            <button type="button" id="tsPreviewCancelBtn" class="ts-btn2 ts-btn2-flat"
+                    onclick="closePreviewDialog()">Cancel</button>
+            <button type="button" id="tsPreviewOkBtn" class="ts-btn2 ts-btn2-primary" disabled
+                    title="Select a JSON file to enable OK"
+                    onclick="handlePreviewOk()">
+                <span class="e-icons e-check"></span> OK
+            </button>
+        </footer>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/editor.js"></script>
+}

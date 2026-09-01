@@ -1,0 +1,16 @@
+{
+  "Organization": [
+    {
+      "OrgName": "ABC Foundation",
+      "OrgAddress": "123 Main Street, New York, NY 10001",
+      "TaxID": "12-3456789",
+      "ReceiptNumber": "REC-2026-0042",
+      "TaxYear": "2026",
+      "DonorName": "John Smith",
+      "DonorAddress": "45 Oak Street, New York, NY 10002",
+      "DonationAmount": "$1,500.00",
+      "DonationDate": "August 20, 2026",
+      "DeductibleAmount": "$1,500.00"
+    }
+  ]
+}

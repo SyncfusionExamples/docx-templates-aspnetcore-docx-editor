@@ -1,0 +1,14 @@
+{
+  "Organization": [
+    {
+      "OrgName": "ABC Foundation",
+      "OrgAddress": "123 Main Street, New York, NY 10001",
+      "DonationDate": "August 20, 2026",
+      "DonorName": "John Smith",
+      "DonorAddress": "45 Oak Street, New York, NY 10002",
+      "DonationAmount": "$1,500.00",
+      "ReceiptNumber": "REC-2026-0042",
+      "PaymentMethod": "Online Payment"
+    }
+  ]
+}

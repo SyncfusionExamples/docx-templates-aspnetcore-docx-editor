@@ -1,0 +1,95 @@
+@using Syncfusion.EJ2
+@model List<string>
+
+@{
+    // The Merge Fields panel is server-rendered from the union the
+    // EditorModel.PageModel seeded (template.fieldKeys ∪ common-merge-fields).
+    // The editor's bootstrapping JS (editor.js) overwrites this list
+    // after the first ImportFileURL round-trip so the doc's MERGEFIELDs
+    // appear too. Insertion + drag-drop wiring is also in editor.js.
+}
+
+<aside class="ts-fields-panel">
+    <header class="ts-fields-head">
+        <h3>Merge Fields</h3>
+        <p class="ts-fields-subtitle">
+            Click a field to insert at the caret, or drag it into the document.
+        </p>
+    </header>
+
+    <div class="ts-fields-groups" id="tsFieldsGroups">
+        @if (Model.Count == 0)
+        {
+            <p class="ts-empty">
+                No merge fields yet. Use the <strong>Add Field</strong> button below to add one.
+            </p>
+        }
+        else
+        {
+            <ul class="ts-field-chip-list" id="tsFieldChipList">
+                @foreach (var key in Model)
+                {
+                    <li class="ts-field-chip-li" draggable="true"
+                        data-merge-field="@key"
+                        ondragstart="onChipDragStart(event, '@key')"
+                        ondragend="onChipDragEnd(event)">
+                        <button type="button" class="ts-field-chip"
+                                onclick="insertMergeField('@key')">
+                            <span class="ts-field-chip-label">@key</span>
+                        </button>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+    <footer class="ts-fields-foot">
+        <p class="ts-fields-hint-foot">
+            Need a new field? Add a custom one — saved into this template or globally for all templates.
+        </p>
+        <ejs-button id="tsAddFieldBtn" content="Add Field"
+                    iconCss="e-icons e-plus" isPrimary="true"
+                    cssClass="ts-e-btn ts-e-btn-add-field"
+                    onclick="openAddFieldDialog()"></ejs-button>
+    </footer>
+</aside>
+
+<!-- Add-Field modal -->
+<div class="ts-add-field-overlay" id="tsAddFieldOverlay" role="dialog" aria-modal="true"
+     style="display:none;" onclick="if(event.target===this) closeAddFieldDialog()">
+    <div class="ts-add-field-dialog" onclick="event.stopPropagation()">
+        <header class="ts-add-field-head">
+            <h3>Add Merge Field</h3>
+            <button type="button" class="ts-add-field-close" onclick="closeAddFieldDialog()">×</button>
+        </header>
+        <form id="tsAddFieldForm" onsubmit="submitAddField(event)" class="ts-add-field-form">
+            <fieldset class="ts-add-field-scope">
+                <legend>Save to</legend>
+                <label class="ts-radio">
+                    <input type="radio" name="ts-add-scope" value="template" checked />
+                    <span><strong>This template</strong></span>
+                </label>
+                <label class="ts-radio">
+                    <input type="radio" name="ts-add-scope" value="common" />
+                    <span><strong>Common (all templates)</strong></span>
+                </label>
+            </fieldset>
+            <label class="ts-add-field-label" for="ts-af-key">
+                Field Name
+                <input id="ts-af-key" type="text" class="ts-input"
+                       placeholder="e.g. DonorEmail" required
+                       pattern="^[A-Za-z][A-Za-z0-9]*$" />
+                <small class="ts-hint">CamelCase, letters/digits only, leading letter.</small>
+            </label>
+            <p class="ts-add-field-error" id="tsAddFieldError" style="display:none;"></p>
+            <footer class="ts-add-field-actions">
+                <ejs-button id="tsAddFieldCancelBtn" content="Cancel" type="Button"
+                            cssClass="e-flat ts-e-btn"
+                            onclick="closeAddFieldDialog()"></ejs-button>
+                <ejs-button id="tsAddFieldSubmitBtn" content="Add Field"
+                            isPrimary="true" cssClass="ts-e-btn"
+                            type="Submit"></ejs-button>
+            </footer>
+        </form>
+    </div>
+</div>

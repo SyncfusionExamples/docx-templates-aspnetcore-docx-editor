@@ -1,0 +1,77 @@
+@using Syncfusion.EJ2
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Document Template Studio</title>
+
+    <!-- Syncfusion EJ2 ASP.NET Core scripts + theme, as documented in
+         https://help.syncfusion.com/document-processing/word/word-processor/asp-net-core/getting-started-core.
+         The version MUST match the installed NuGet packages
+         (Syncfusion.EJ2.AspNet.Core 34.2.2); a mismatch causes the
+         inline init scripts emitted by the EJ2 tag helpers (which
+         reference `ejs.<module>.<Control>` directly) to throw
+         ReferenceError. The bundle is loaded synchronously in <head>
+         so it is fully parsed BEFORE the body's inline init scripts
+         execute. The script URL uses the /dist/ path (the canonical
+         location for the bundled ej2.min.js on the Syncfusion CDN).
+         Theme: tailwind3 — Syncfusion's Tailwind-inspired modern
+         theme, applied app-wide (all EJ2 controls incl. the
+         DocumentEditor ribbon/toolbar render with it). -->
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/34.2.2/tailwind3.css" />
+    <script src="https://cdn.syncfusion.com/ej2/34.2.2/dist/ej2.min.js"></script>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <!-- Left sidebar — visual language taken ONLY from the Reference.css
+         sidebar block (.ts-sidebar / .ts-sidebar-head / .ts-tree /
+         .ts-tree-group / .ts-tree-row). -->
+    <div class="ts-app ts-app-with-sidebar">
+        <nav class="ts-sidebar">
+            <div class="ts-sidebar-head">
+                <h2>Document Template Studio</h2>
+                <p class="ts-subtitle">Syncfusion DOCX Editor</p>
+            </div>
+            <div class="ts-tree">
+                <div class="ts-tree-group">
+                    <div class="ts-tree-group-head">
+                        <span class="ts-type-dot" style="background:#3d5afe"></span>
+                        <span class="ts-tree-group-label">Templates</span>
+                    </div>
+                    <ul class="ts-tree-group-list">
+                        <li>
+                            @{
+                                var isDash = Context.Request.Path.Value is "/" or "/Index";
+                            }
+                            <a href="/Index" class="ts-tree-row @(isDash ? "is-selected" : "")"
+                               title="Reusable document templates">
+                                <span class="e-icons e-description ts-file-icon"></span>
+                                <span class="ts-tree-text">
+                                    <span class="ts-tree-name">All Templates</span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="ts-sidebar-foot">
+                <button class="ts-sidebar-button" type="button">Sign Out</button>
+            </div>
+        </nav>
+
+        <main class="ts-main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Syncfusion ASP.NET Core Script Manager. Per the official
+         getting-started guide, <ejs-scripts> MUST be registered at the
+         end of <body>; it is what initialises the EJ2 controls on the
+         page after the CDN bundle has loaded. Without it the tag
+         helpers render their host <div> placeholders but the controls
+         never instantiate. -->
+    <ejs-scripts></ejs-scripts>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

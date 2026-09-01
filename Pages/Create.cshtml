@@ -1,0 +1,10 @@
+@page
+@model DocumentTemplateStudioService.Pages.CreateModel
+@{
+    // The Create form is now a modal on the dashboard. This page only
+    // exists to host the POST handler (/Create) that the modal
+    // AJAX-submits to. A direct GET here just bounces back to the
+    // dashboard so the modal opens there.
+    Response.Redirect("/Index", permanent: false);
+    return;
+}

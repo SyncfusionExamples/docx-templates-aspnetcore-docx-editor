@@ -1,0 +1,80 @@
+@* _CreateTemplateModal.cshtml — server-rendered Create Template
+   modal. Rendered inline inside the dashboard (/Index) so the user
+   stays on the same page when creating a template. The form targets
+   the /Create page-model's POST handler via fetch() (AJAX) so submit
+   doesn't trigger a full page reload — the modal closes and the
+   browser navigates to /Editor?id=<newId> only on success.
+
+   The shape mirrors the old React CreateTemplateDialog: Name,
+   Description, Signer Roles (free-text input + suggested-role chips
+   that append on click), and an optional .docx "Editable Body"
+   upload. Edit mode is supported via the optional `id` query string
+   on /Create (GET pre-fills the form). For the dashboard we only use
+   the create mode — edit lives at /Create?id=<id>. *@
+
+<div class="ts-modal-overlay" id="tsCreateModal" role="dialog"
+     aria-modal="true" aria-labelledby="tsCreateTitle" style="display:none;">
+    <div class="ts-modal-dialog" onclick="event.stopPropagation()">
+        <header class="ts-modal-head">
+            <h3 id="tsCreateTitle">Create Template</h3>
+            <button type="button" class="ts-modal-close"
+                    onclick="closeCreateTemplateModal()" aria-label="Close">×</button>
+        </header>
+
+        <form id="tsCreateForm" class="ts-modal-form"
+              onsubmit="submitCreateTemplate(event)">
+            <input type="hidden" name="Id" value="" />
+            <input type="hidden" name="Type" value="General" />
+
+            <div class="ts-field">
+                <label for="ts-create-name">Template Name</label>
+                <input id="ts-create-name" name="Name" class="ts-input"
+                       placeholder="e.g. Donation Thank-You Letter" required />
+            </div>
+
+            <div class="ts-field">
+                <label for="ts-create-desc">Description</label>
+                <textarea id="ts-create-desc" name="Description"
+                          class="ts-input ts-textarea" rows="2"
+                          placeholder="Brief description of this template's purpose."></textarea>
+            </div>
+
+            <div class="ts-field">
+                <label for="ts-create-roles">Signer Roles <span class="ts-req">*</span></label>
+                <input id="ts-create-roles" name="RolesCsv" class="ts-input"
+                       placeholder="Comma-separated, e.g. Finance Officer, Approver"
+                       required
+                       title="At least one signer role is required to create a template." />
+                <small class="ts-hint">Required. Click a chip below to add a role.</small>
+                <div class="ts-role-suggestions">
+                    @foreach (var r in new[] {
+                        "Organization", "Organization Representative", "Authorized Representative",
+                        "Finance Officer", "Program Director", "Signer", "Approver",
+                        "Witness", "Client", "Company" })
+                    {
+                        <button type="button" class="ts-chip ts-role-chip-suggestion"
+                                data-role="@r">@r</button>
+                    }
+                </div>
+            </div>
+
+            <div class="ts-field">
+                <label for="ts-create-body">Editable Body (optional .docx)</label>
+                <input id="ts-create-body" type="file" name="BodyFile"
+                       accept=".docx" class="ts-file-input" />
+                <small class="ts-hint">Upload an existing Word document, or leave blank to start from scratch.</small>
+            </div>
+
+            <p class="ts-modal-error" id="tsCreateError" style="display:none;"></p>
+
+            <footer class="ts-modal-actions">
+                <ejs-button id="tsCreateCancelBtn" content="Cancel" type="Button"
+                            cssClass="e-flat ts-e-btn"
+                            onclick="closeCreateTemplateModal()"></ejs-button>
+                <ejs-button id="tsCreateSubmitBtn" content="Create Template"
+                            isPrimary="true" cssClass="ts-e-btn"
+                            type="Submit"></ejs-button>
+            </footer>
+        </form>
+    </div>
+</div>

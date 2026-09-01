@@ -1,0 +1,84 @@
+﻿[
+  {
+    "id": "tpl-Pledge_Payment_Reminder-1a03a7ea955",
+    "name": "Pledge Payment Reminder",
+    "type": "Invoice",
+    "description": "Template for Pledge Payment Reminder",
+    "fieldKeys": [
+      "OrgName",
+      "OrgAddress",
+      "DonorName",
+      "DonorAddress",
+      "DonationAmount",
+      "DonationDate"
+    ],
+    "docxUrl": "/Templates/Pledge_Payment_Reminder-1a03a7ea955.Docx",
+    "uploadedAt": "2026-08-25T19:56:14.5553323Z",
+    "updatedAt": "2026-09-01T07:07:44.9341398Z",
+    "roles": [
+      "Finance Officer",
+      "Approver"
+    ]
+  },
+  {
+    "id": "tpl-Donation_Thank-You_Letter-1a03a7f1852",
+    "name": "Donation Thank-You Letter",
+    "type": "ThankYou",
+    "description": "Template for Donation Thank-You Letter",
+    "fieldKeys": [
+      "OrgName",
+      "OrgAddress",
+      "DonorName",
+      "DonorAddress",
+      "DonationAmount",
+      "DonationDate"
+    ],
+    "docxUrl": "/Templates/Donation_Thank-You_Letter-1a03a7f1852.Docx",
+    "uploadedAt": "2026-08-25T19:56:42.9643291Z",
+    "updatedAt": "2026-09-01T09:29:27.3265499Z",
+    "roles": [
+      "Organization Representative",
+      "Client"
+    ]
+  },
+  {
+    "id": "tpl-Donor_Impact_Letter-1a03a7f55c8",
+    "name": "Donor Impact Letter",
+    "type": "General",
+    "description": "Donor Impact Letter Template",
+    "fieldKeys": [
+      "OrgName",
+      "OrgAddress",
+      "DonorName",
+      "DonorAddress"
+    ],
+    "docxUrl": "http://localhost:5212/Templates/Donor_Impact_Letter-1a03a7f55c8.docx",
+    "uploadedAt": "2026-08-25T19:56:58.6976266Z",
+    "updatedAt": "2026-09-01T08:28:44.0497704Z",
+    "roles": [
+      "Program Director",
+      "Organization Representative"
+    ]
+  },
+  {
+    "id": "tpl-Donation_Official_Tax_Receipt-1a03a801d33",
+    "name": "Donation Official Tax Receipt",
+    "type": "TaxReceipt",
+    "description": "Donation Official Tax Receipt Template",
+    "fieldKeys": [
+      "OrgName",
+      "OrgAddress",
+      "DonorName",
+      "DonorAddress",
+      "DonationAmount",
+      "DonationDate"
+    ],
+    "docxUrl": "http://localhost:5212/Templates/Donation_Official_Tax_Receipt-1a03a801d33.docx",
+    "uploadedAt": "2026-08-25T19:57:49.7489420Z",
+    "updatedAt": "2026-08-25T19:57:49.7489450Z",
+    "roles": [
+      "Finance Officer",
+      "Authorized Representative"
+    ]
+  }
+]
