@@ -366,8 +366,8 @@ function handleSave(btn) {
         tsDirty = false;
         setSaveEnabled(false);
         showEditorToast(j.published
-            ? 'Saved and published to "' + j.savedPath + '".'
-            : (j.warning || 'Saved to disk (not linked to a template).'), 'success');
+            ? 'Saved and published.'
+            : (j.warning || 'Saved (not linked to a template).'), 'success');
     })
     .catch(function (err) {
         showEditorToast('Save failed: ' + (err.message || err), 'error');
